@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
@@ -26,6 +27,10 @@ AThirdPersonCharacterBase::AThirdPersonCharacterBase()
 
 	BaseTurnRate = 45.0f;
 	BaseLookUpAtRate = 45.0f;
+
+	JumpHeight = 600.0f;
+	WalkingSpeed = 600.0f;
+	RunningSpeed = 1000.0f;
 
 }
 
@@ -62,13 +67,39 @@ void AThirdPersonCharacterBase::LookUpAtRate(float value)
 	AddControllerPitchInput(value * BaseLookUpAtRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AThirdPersonCharacterBase::Landed(const FHitResult& Hit)
+{
+	DoubleJumpCounter = 0;
+}
+
+void AThirdPersonCharacterBase::DoubleJump()
+{
+	if (DoubleJumpCounter <= 1) {
+		ACharacter::LaunchCharacter(FVector(0, 0, JumpHeight), false, true);
+		DoubleJumpCounter++;
+	}
+}
+
+void AThirdPersonCharacterBase::Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+}
+
+void AThirdPersonCharacterBase::Walk()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
+}
+
 // Called to bind functionality to input
 void AThirdPersonCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AThirdPersonCharacterBase::DoubleJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AThirdPersonCharacterBase::Sprint);
+	PlayerInputComponent->BindAction("Walk", IE_Released, this, &AThirdPersonCharacterBase::Walk);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AThirdPersonCharacterBase::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AThirdPersonCharacterBase::MoveRight);
@@ -81,6 +112,8 @@ void AThirdPersonCharacterBase::SetupPlayerInputComponent(UInputComponent* Playe
 
 
 }
+
+
 
 
 

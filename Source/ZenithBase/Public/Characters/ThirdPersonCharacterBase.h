@@ -36,6 +36,8 @@ protected:
 	void TurnAtRate(float value);
 	void LookUpAtRate(float value);
 
+	virtual void Landed(const FHitResult& Hit) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseTurnRate;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
@@ -46,4 +48,21 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	UFUNCTION()
+		void DoubleJump();
+	UPROPERTY()
+		int DoubleJumpCounter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float JumpHeight;
+
+	UFUNCTION()
+		void Sprint();
+	UPROPERTY(EditAnywhere)
+		float RunningSpeed;
+
+	UFUNCTION()
+		void Walk();
+	UPROPERTY(EditAnywhere)
+		float WalkingSpeed;
 };
