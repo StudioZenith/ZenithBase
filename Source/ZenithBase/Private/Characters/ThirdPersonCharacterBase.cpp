@@ -29,7 +29,7 @@ AThirdPersonCharacterBase::AThirdPersonCharacterBase()
 	BaseLookUpAtRate = 45.0f;
 
 	JumpHeight = 600.0f;
-	WalkingSpeed = 600.0f;
+	WalkingSpeed = 6000.0f;
 	RunningSpeed = 1000.0f;
 
 }
@@ -82,7 +82,7 @@ void AThirdPersonCharacterBase::DoubleJump()
 
 void AThirdPersonCharacterBase::Sprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
 }
 
 void AThirdPersonCharacterBase::Walk()
@@ -98,8 +98,8 @@ void AThirdPersonCharacterBase::SetupPlayerInputComponent(UInputComponent* Playe
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AThirdPersonCharacterBase::DoubleJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AThirdPersonCharacterBase::Sprint);
-	PlayerInputComponent->BindAction("Walk", IE_Released, this, &AThirdPersonCharacterBase::Walk);
+	//PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AThirdPersonCharacterBase::Sprint);
+	PlayerInputComponent->BindAction("Walk", IE_Pressed, this, &AThirdPersonCharacterBase::Walk);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AThirdPersonCharacterBase::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AThirdPersonCharacterBase::MoveRight);
